@@ -1,0 +1,10 @@
+core = "7.x"
+description = "Provides VoIP Drupal scripts for the Claro project."
+name = "Claro"
+dependencies[] = voip
+dependencies[] = voipqueue
+dependencies[] = voipnumberblast
+package = "claro"
+project = "claro"
+
+

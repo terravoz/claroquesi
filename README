@@ -1,0 +1,4 @@
+Add to crontab
+sudo crontab -e
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+*/15 * * * * /usr/bin/drush -r /data/var/www/claroquesi advancedqueue --all --timeout=900 -l http://whatsupserver.media.mit.edu/claroquesi
