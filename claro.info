@@ -3,7 +3,8 @@ description = "Provides VoIP Drupal scripts for the Claro project."
 name = "Claro"
 dependencies[] = voip
 dependencies[] = voipqueue
-dependencies[] = voipnumberblast
+dependencies[] = voipnumber_blast
+dependencies[] = nannyvan_news
 package = "claro"
 project = "claro"
 

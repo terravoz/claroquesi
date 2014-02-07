@@ -23,12 +23,12 @@ function claro_menu() {
 }
 
 function claro_admin_settings_form() {
-  $form['claro_sms_footnote'] = array(
+  /*$form['claro_sms_footnote'] = array(
     '#type' => 'textfield',
     '#title' => t('SMS footnote'),
     '#description' => t('SMS footnote to apply at end of each SMS sent by the system'),
     '#default_value' => variable_get('claro_sms_footnote', ''),
-  );
+  );*/
 
   $form['claro_sms_help'] = array(
     '#type' => 'textfield',
@@ -41,7 +41,7 @@ function claro_admin_settings_form() {
     '#type' => 'textfield',
     '#title' => t('SMS welcome'),
     '#description' => t('Welcome SMS for text to be sent the first time a user subscribes to the service.'),
-    '#default_value' => variable_get('claro_sms_welcome', 'Welcome to Claro Que Si'),
+    '#default_value' => variable_get('claro_sms_welcome', 'Welcome to NannyVan App'),
   );
 
   return system_settings_form($form);
