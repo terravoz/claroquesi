@@ -12,8 +12,8 @@ foreach (array('claro.scripts.inc') as $file) {
  */
 function claro_menu() {
   $items['admin/voip/claro'] = array(
-    'title' => 'SMS Broadcast',
-    'description' => 'SMS Broadcast admin page.',
+    'title' => 'NannyVan App Config',
+    'description' => 'NannyVan App configuration page.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('claro_admin_settings_form'),
     'access arguments' => array('administer site configuration'),
@@ -28,6 +28,22 @@ function claro_admin_settings_form() {
     '#title' => t('SMS footnote'),
     '#description' => t('SMS footnote to apply at end of each SMS sent by the system'),
     '#default_value' => variable_get('claro_sms_footnote', ''),
+  );*/
+
+  /*$form['claro_news_script_number'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Phone number for NannyVan News Recording'),
+    '#description' => t('Phone number to be used for NannyVan News Recording.
+    Number must be in the <a target="_blank" href="http://en.wikipedia.org/wiki/E.164">E.164</a> format.
+    Supported formats include:
+    <ul>
+    <li>tel: Phone Number - must be proceeded by a + and the country code (i.e. +14155551212 for a US #)</li>
+    </ul>
+    '),
+    '#size' => 40,
+    '#maxlength' => 255,
+    '#default_value' => variable_get('claro_news_script_number', '+13479675529'),
+    '#required' => TRUE,
   );*/
 
   $form['claro_sms_help'] = array(

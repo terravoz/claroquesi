@@ -9,7 +9,7 @@
  * Implementation of hook_voipscript_get_script_names()
  */
 function claro_voipscript_get_script_names() {
-  $script_names[] = 'claro_router_script';
+  //$script_names[] = 'claro_router_script';
   $script_names[] = 'claro_welcome_script';
   $script_names[] = 'claro_sms_handler_script';
   return $script_names;
@@ -24,9 +24,10 @@ function claro_voipscript_load_script($script_name, $options=NULL) {
   switch ($script_name) {
     default:
       break;
-    case 'claro_router_script':
+   /* case 'claro_router_script':
       $script = new VoipScript('claro_router_script');
-      $script->addGotoIf('claro_recording', "^%dest_number == '+13479675529'");
+      $nannyvan_news_number = variable_get('claro_news_script_number', '+13479675529');
+      $script->addGotoIf('claro_recording', "^%dest_number == '$nannyvan_news_number'");
 // TODO: Implement generic way to associate scripts with phone numbers
       $script->addGoto('claro_welcome');
 //      $script->addGotoIf('claro_welcome', "^%dest_number == '+16463621540'");
@@ -44,7 +45,7 @@ function claro_voipscript_load_script($script_name, $options=NULL) {
 
       $script->addLabel('hang_up');
       $script->addHangup();
-      break;
+      break;*/
     case 'claro_welcome_script':
       $script = new VoipScript('claro_welcome_script');
       $script->addSetVoice('woman');
@@ -542,77 +543,97 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
     'Welcome to The NannyVan App! To JOIN and receive weekly text messages, text the letter "J". To STOP receiving text messages, text "S". For HELP, text "H". Msg & data rates may apply.');
   $prefix_msg = 'NannyVan App. ';
   $msg = trim($msg);
-  if ($msg == '') {
-    $ret = t("Empty request.") . ' ' . $help_msg;
+
+  if (!claro_get_phone_number($caller_number)) {
+    //Number already exists
+    $cmd = 'J';
+  }
+  else {
+    if ($msg) {
+      $request = explode(" ", $msg);
+      $cmd = strtoupper($request[0]);
+    }
+  }
+
+  /*if ($msg == '') {
+    //$ret = t("Empty request.") . ' ' . $help_msg;
     //log the error
-    claro_log("Empty message received. Call ID: ".$call_id);
+    //claro_log("Empty message received. Call ID: ".$call_id);
+    if (claro_get_phone_number($caller_number)) {
+      //Number already exists
+      $ret = t('Number already registered.');
+    }
+    else {
+      $cmd = 'J';
+    }
   }
   else {
     $request = explode(" ", $msg);
     $cmd = strtoupper($request[0]);
-    if($cmd == 'Y') {
-      $nids = VoipNumber::getNidsByNumber($caller_number);
-      $phone_number = claro_get_phone_number($caller_number);
-      /*$voip_numbers = voipnumber_get_voip_numbers($caller_number, 'number');
-      if(is_array($voip_numbers) && isset($voip_numbers[0])) {
-        $vn = $voip_numbers[0];
-        $vn->setVerified();
-        $vn->save();
-        $ret = ''; //success, no need for reply?
-      }*/
-      //@todo: if number is not published then resend sms
-      watchdog('debug', print_r($phone_number,true));
-      if($phone_number) {
-        $phone_number->status = 1; //verify
-        node_save($phone_number);
-        $ret = variable_get('claro_sms_welcome', 'Welcome to NannyVan App').' '.$help_msg;
-      }
-      else {
-        $ret = t('Phone number not recognised.');
-      }
-    }
-    else if($cmd == 'S') {
-      //Stop getting messages
-      $nids = VoipNumber::getNidsByNumber($caller_number);
-      if ($nid = reset($nids)) {
-        node_delete($nid);
-        $ret = t('Number removed from the list.');
-      }
-      else {
-        $ret = t('Number not in the list.');
-      }
-    }
-    else if($cmd == 'J') {
-      if (claro_get_phone_number($caller_number)) {
-        //Number already exists
-        $ret = t('Number already registered.');
-      }
-      else {
-        $node->type = 'phone_number';
-        $node->title = $caller_number;
-        $node->language = 'und';
-        $node->status = 1;
-        $node->field_phone_number['und'][0]['vnid'] = $caller_number;
-        $language = claro_number_to_lang($dest_number);
-        $node->field_language['und'][0]['value'] = $language;
-        // create the node
-        node_save($node);
-        //@todo: verify number
-        if($node->nid){
-          $ret = t('You\'re subscribed to NannyVan App! To stop receiving updates, text S. For help, text H');
-        }
-        else {
-          watchdog('claro', 'Error saving phone number: '.print_r($node, true), array(), WATCHDOG_ERROR);
-          $ret = t('System error. Please try again later.');
-        }
-      }
-    }
-    else if($cmd == 'H') {
-      $ret = $help_msg;
+  }*/
+
+  if($cmd == 'Y') {
+    //$nids = VoipNumber::getNidsByNumber($caller_number);
+    $phone_number = claro_get_phone_number($caller_number);
+    /*$voip_numbers = voipnumber_get_voip_numbers($caller_number, 'number');
+    if(is_array($voip_numbers) && isset($voip_numbers[0])) {
+      $vn = $voip_numbers[0];
+      $vn->setVerified();
+      $vn->save();
+      $ret = ''; //success, no need for reply?
+    }*/
+    //@todo: if number is not published then resend sms
+    //watchdog('debug', print_r($phone_number,true));
+    if($phone_number) {
+      $phone_number->status = 1; //verify
+      node_save($phone_number);
+      $ret = variable_get('claro_sms_welcome', 'Welcome to NannyVan App').' '.$help_msg;
     }
     else {
-      $ret = t('Unknown command. ') . $help_msg;
+      $ret = t('Phone number not recognised.');
     }
+  }
+  else if($cmd == 'S') {
+    //Stop getting messages
+    $nids = VoipNumber::getNidsByNumber($caller_number);
+    if ($nid = reset($nids)) {
+      node_delete($nid);
+      $ret = t('Number removed from the list.');
+    }
+    else {
+      $ret = t('Number not in the list.');
+    }
+  }
+  else if($cmd == 'J') {
+    if (claro_get_phone_number($caller_number)) {
+      //Number already exists
+      $ret = t('Number already registered.');
+    }
+    else {
+      $node->type = 'phone_number';
+      $node->title = $caller_number;
+      $node->language = 'und';
+      $node->status = 1;
+      $node->field_phone_number['und'][0]['vnid'] = $caller_number;
+      $language = claro_number_to_lang($dest_number);
+      $node->field_language['und'][0]['value'] = $language;
+      // create the node
+      node_save($node);
+      //@todo: verify number
+      if($node->nid){
+        $ret = t('You\'re subscribed to NannyVan App! To stop receiving updates, text S. For help, text H');
+      }
+      else {
+        watchdog('claro', 'Error saving phone number: '.print_r($node, true), array(), WATCHDOG_ERROR);
+        $ret = t('System error. Please try again later.');
+      }
+    }
+  }
+  else if($cmd == 'H') {
+    $ret = $help_msg;
+  }
+  else {
+    $ret = t('Unknown command. ') . $help_msg;
   }
 
   return $prefix_msg.$ret;
