@@ -47,14 +47,14 @@ function claro_admin_settings_form() {
   );*/
 
   $form['claro_sms_help'] = array(
-    '#type' => 'textfield',
+    '#type' => 'textarea',
     '#title' => t('SMS help'),
     '#description' => t('Text SMS help message'),
     '#default_value' => variable_get('claro_sms_help', 'To subscribe to the list please text SUBSCRIBE. To Stop getting messages, text S. For help, text H.'),
   );
 
   $form['claro_sms_welcome'] = array(
-    '#type' => 'textfield',
+    '#type' => 'textarea',
     '#title' => t('SMS welcome'),
     '#description' => t('Welcome SMS for text to be sent the first time a user subscribes to the service.'),
     '#default_value' => variable_get('claro_sms_welcome', 'Welcome to NannyVan App'),

@@ -622,7 +622,7 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
       node_save($node);
       //@todo: verify number
       if($node->nid){
-        $ret = t('You\'re subscribed to NannyVan App! To stop receiving updates, text S. For help, text H');
+        $ret = t('Welcome to the Domestic Worker App! To STOP receiving text messages, text "S". For HELP, text "H". Msg & data rates may apply.');
       }
       else {
         watchdog('claro', 'Error saving phone number: '.print_r($node, true), array(), WATCHDOG_ERROR);
@@ -637,7 +637,8 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
     $ret = t('Unknown command. ') . $help_msg;
   }
 
-  return $prefix_msg.$ret;
+  return $ret;
+  //return $prefix_msg.$ret;
 }
 
 function claro_log($message) {
