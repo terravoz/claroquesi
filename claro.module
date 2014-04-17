@@ -107,7 +107,7 @@ function claro_form_alter(&$form, &$form_state, $form_id) {
   }
   else if($form_id == 'broadcast_node_form') {
    //_d($form);
-    drupal_set_title(t('Announcement creation'));
+    drupal_set_title(t('Create a Message'));
     drupal_add_js(drupal_get_path('module', 'claro').'/claro.js');
     $form['actions']['submit']['#value'] = t('Start');
     $form['actions']['preview']['#value'] = t('Test');

@@ -587,7 +587,7 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
     if($phone_number) {
       $phone_number->status = 1; //verify
       node_save($phone_number);
-      $ret = variable_get('claro_sms_welcome', 'Welcome to NannyVan App').' '.$help_msg;
+      $ret = variable_get('claro_sms_welcome', 'Welcome to NannyVan App');
     }
     else {
       $ret = t('Phone number not recognised.');
@@ -598,7 +598,8 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
     $nids = VoipNumber::getNidsByNumber($caller_number);
     if ($nid = reset($nids)) {
       node_delete($nid);
-      $ret = t('Number removed from the list.');
+      $ret = t('You\'ve unsubscribed from the Domestic Worker App and should not receive further messages. Should you choose to subscribe again, text any letter to the following number: (347) 967-5500
+');
     }
     else {
       $ret = t('Number not in the list.');
