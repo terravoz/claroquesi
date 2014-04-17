@@ -18,34 +18,34 @@ function claro_voipscript_get_script_names() {
 /**
  * Implementation of hook_voipscript_load_script()
  */
-function claro_voipscript_load_script($script_name, $options=NULL) {
+function claro_voipscript_load_script($script_name, $options = NULL) {
 
   $script = NULL;
   switch ($script_name) {
     default:
       break;
-   /* case 'claro_router_script':
-      $script = new VoipScript('claro_router_script');
-      $nannyvan_news_number = variable_get('claro_news_script_number', '+13479675529');
-      $script->addGotoIf('claro_recording', "^%dest_number == '$nannyvan_news_number'");
-// TODO: Implement generic way to associate scripts with phone numbers
-      $script->addGoto('claro_welcome');
-//      $script->addGotoIf('claro_welcome', "^%dest_number == '+16463621540'");
+    /* case 'claro_router_script':
+       $script = new VoipScript('claro_router_script');
+       $nannyvan_news_number = variable_get('claro_news_script_number', '+13479675529');
+       $script->addGotoIf('claro_recording', "^%dest_number == '$nannyvan_news_number'");
+ // TODO: Implement generic way to associate scripts with phone numbers
+       $script->addGoto('claro_welcome');
+ //      $script->addGotoIf('claro_welcome', "^%dest_number == '+16463621540'");
 
-      $script->addGoto('hang_up');
+       $script->addGoto('hang_up');
 
-      $script->addLabel('claro_recording');
-      $script->addGosub('nannyvan_news_main_menu_script');
-      $script->addGoto('hang_up');
+       $script->addLabel('claro_recording');
+       $script->addGosub('nannyvan_news_main_menu_script');
+       $script->addGoto('hang_up');
 
-      $script->addLabel('claro_welcome');
-      $script->addGosub('claro_welcome_script');
-      $script->addGoto('hang_up');
+       $script->addLabel('claro_welcome');
+       $script->addGosub('claro_welcome_script');
+       $script->addGoto('hang_up');
 
 
-      $script->addLabel('hang_up');
-      $script->addHangup();
-      break;*/
+       $script->addLabel('hang_up');
+       $script->addHangup();
+       break;*/
     case 'claro_welcome_script':
       $script = new VoipScript('claro_welcome_script');
       $script->addSetVoice('woman');
@@ -62,14 +62,13 @@ function claro_voipscript_load_script($script_name, $options=NULL) {
       $script->addLabel('language_selection');
       /*$p_main_menu[] = v("Para Espanol, oprima uno. ", array(), NULL, 'carmen-twilio');
       $p_main_menu[] = v("Para Portugues, tecle dois. ",  array(), NULL, 'portuguese-brazil');*/
-      $p_main_menu[] = v("Para Espanol, oprima uno. Para Portugues, tecle dois. For English, press three. ");
+      $p_main_menu[] = v("Para Espanol, oprima uno. For English, press two. ");
       $input_options = array(
-      '1' => 'spanish_version',
-      '2' => 'portugese_version',
-      '3' => 'english_version',
-      '#' => 'invalid_option',
-      'i' => 'invalid_option',
-      't' => 'invalid_option'
+        '1' => 'spanish_version',
+        '2' => 'english_version',
+        '#' => 'invalid_option',
+        'i' => 'invalid_option',
+        't' => 'invalid_option'
       );
       $p_invalid_msg = v('Oops! That option is invalid. ');
       $script->addRunIvrMenu($p_main_menu, $input_options, $p_invalid_msg);
@@ -97,25 +96,23 @@ function claro_voipscript_load_script($script_name, $options=NULL) {
       break;
     case 'claro_intro_script':
       $script = new VoipScript('claro_intro_script');
-      $voice =  $options['voice'];
+      $voice = $options['voice'];
       voipvoice_set_current_voice($voice);
       $script->addSay(v("If this is an emergency, hang up and dial 9 1 1. "));
-      $script->addSay(v("Welcome house cleaners, nannies, and personal
-      attendants! You have reached the NannyVan public art and know-your-rights
-      App — accessible by any kind of phone. "));
+      $script->addSay(v("Welcome house cleaners, nannies, and caregivers! You have reached the Domestic Worker App — accessible by any kind of phone. "));
 
-      $latest_news = _nannyvan_news_get_last_news();
-      $script->addSay(v("Latest news from the NannyVan. "));
-      $script->addSay($latest_news);
-      $script->addSay(". ");
-      //$script->addSay(v("You have just heard the latest dispatch from the NannyVan. "));
-
+      /* $latest_news = _nannyvan_news_get_last_news();
+       $script->addSay(v("Latest news from the NannyVan. "));
+       $script->addSay($latest_news);
+       $script->addSay(". ");
+       //$script->addSay(v("You have just heard the latest dispatch from the NannyVan. "));
+ */
       $script->addGosub('claro_main_menu_script', $options);
       $script->addHangup();
       break;
     case 'claro_main_menu_script':
       $script = new VoipScript('claro_main_menu_script');
-      $voice =  $options['voice'];
+      $voice = $options['voice'];
       voipvoice_set_current_voice($voice);
 
       $script->addLabel('options_menu');
@@ -126,7 +123,7 @@ To learn about the Domestic Workers Bill of Rights in New York, press 3.
 To learn more about Claro que Si, press 4.
 To repeat this menu, press the star key.");*/
 
-      $p_options_menu = v("Main Menu.
+      /*$p_options_menu = v("Main Menu.
 To sign up to to receive weekly text messages, press 1.
 To hear news from the NannyVan, press 2.
 To learn about health and safety tips, press 3.
@@ -134,15 +131,26 @@ To know your rights as a domestic worker, press 4.
 To learn about landmark victories for domestic workers press 5.
 To learn about the NannyVan and the NannyVan App, press 6.
 To repeat this menu, press the star key.
+");*/
+
+      $p_options_menu = v("Main Menu
+To sign up to receive weekly updates by text, press 1.
+To learn about health and safety tips, press 2.
+To know your rights as a domestic worker, press 3.
+To learn about landmark victories for domestic workers, press 4.
+To learn about the Domestic Worker App, press 5.
+To be connected with the National Domestic Workers Alliance, press 6.
+To repeat this menu, press the star key.
 ");
 
       $input_options = array(
         '1' => 'sms_subscription',
-        '2' => 'news',
-        '3' => 'play_episodes',
-        '4' => 'domestic',
-        '5' => 'victories',
-        '6' => 'get_information',
+        //'2' => 'news',
+        '2' => 'play_episodes',
+        '3' => 'domestic',
+        '4' => 'victories',
+        '5' => 'get_information',
+        '6' => 'domestic_workers_connect', //@todo: new
         '*' => 'repeat',
         '#' => 'hang_up',
         'i' => 'invalid_option',
@@ -156,9 +164,8 @@ To repeat this menu, press the star key.
       $script->addGosub('claro_play_episodes_demo', $options);
       $script->addGoto('options_menu');
 
-      //@todo: waiting for final text
       $script->addLabel('get_information');
-      $script->addSay(v('Here is recording for "About NannyVan app"'));
+      $script->addSay(v('Here is recording for "ABOUT THE DOMESTIC WORKER APP"'));
       $script->addGoto('options_menu');
 
       $script->addLabel('sms_subscription');
@@ -182,6 +189,11 @@ To repeat this menu, press the star key.
       $script->addGosub('claro_victories_script', $options);
       $script->addGoto('options_menu');
 
+      $script->addLabel('domestic_workers_connect');
+      //@todo:
+      $script->addGosub('domestic_workers_connect_script', $options);
+      $script->addGoto('options_menu');
+
       $script->addLabel('repeat');
       $script->addGoto('options_menu');
 
@@ -192,7 +204,7 @@ To repeat this menu, press the star key.
       break;
     case 'claro_play_episodes_demo':
       $script = new VoipScript('claro_play_episodes_demo');
-      $voice =  $options['voice'];
+      $voice = $options['voice'];
       voipvoice_set_current_voice($voice);
 
       $script->addLabel('options_menu');
@@ -248,17 +260,17 @@ To return to the main menu, press the pound key.
     case 'claro_play_story_script':
       $script = new VoipScript('claro_play_story_script');
       $story_id = $options['story_id'];
-      $voice =  $options['voice'];
+      $voice = $options['voice'];
       voipvoice_set_current_voice($voice);
 
       $episode = claro_get_episode($story_id);
-      if(!$episode) {
+      if (!$episode) {
         $script->addSay("Invalid story id. ");
         $script->addLog("Invalid story id: $story_id. ");
         $script->addGoto('go_back');
       }
       else {
-        $prompt =  new VoipPrompt($episode['body']);
+        $prompt = new VoipPrompt($episode['body']);
       }
 
       $script->addLabel('play_story');
@@ -274,10 +286,10 @@ If you want to start over, hear the list of episodes or the main menu, press any
       $script->addGotoIf('episode_outro', "^%input_digits");
 
       $script->addLabel('episode_outro');
-      $p_episode_outro =v('To repeat this episode, press 1.
+      $p_episode_outro = v('To repeat this episode, press 1.
       To hear other episodes press 2.
       To go back to the main menu, press the pound key. ');
-      $input_options =  array(
+      $input_options = array(
         '1' => 'repeat',
         '2' => 'go_back',
         '#' => 'go_back_main_menu',
@@ -301,7 +313,7 @@ If you want to start over, hear the list of episodes or the main menu, press any
       break;
     case 'claro_domestic_script':
       $script = new VoipScript('claro_domestic_script');
-      $voice =  $options['voice'];
+      $voice = $options['voice'];
       voipvoice_set_current_voice($voice);
       $script->addLabel('options_menu');
       $p_options_menu = v("Directory for Info about your rights in various states.
@@ -313,7 +325,7 @@ To return to the main menu, press the pound key. ");
       $input_options = array(
         '1' => 'ny',
         '2' => 'coming_soon',
-        '3' => 'coming_soon',
+        '3' => 'california',
         '#' => 'go_back',
         'i' => 'invalid_option',
         't' => 'invalid_option'
@@ -323,9 +335,12 @@ To return to the main menu, press the pound key. ");
       $script->addGoto('%ivr_option_selected');
 
       $script->addLabel('ny');
-      $script->addSay(v('Your call will now be redirected to NDNS. '));
-      //@todo: confirm number
-      //$script->addDial('+16466993989');
+      $script->addSay(v('Your call will now be redirected to New Day New Standard. '));
+      $script->addDial('+16466993989');
+      $script->addHangup();
+
+      $script->addLabel('california');
+      $script->addGosub('claro_california', $options);
       $script->addHangup();
 
       $script->addLabel('coming_soon');
@@ -336,10 +351,53 @@ To return to the main menu, press the pound key. ");
       $script->addReturn();
 
       break;
+    case 'claro_victories_script':
+      $script = new VoipScript('claro_california');
+      $voice = $options['voice'];
+      voipvoice_set_current_voice($voice);
+
+      $script->addLabel('options_menu');
+      $p_options_menu = v("Your rights as a domestic worker in California.
+For the definition of a domestic worker under California Law, press 1
+For minimum wage and overtime pay, press 2
+For meal breaks, press 3
+For info about meals and lodging or being fired, press 4
+For info about workers comp, harassment, and immigration, press 5
+To hear about the rights that domestic workers in California seek to achieve, press 6
+For timesheets and recordkeeping, press 7.
+To repeat this menu, press the star key.
+To go back to the main menu for the Domestic Worker App, press the pound key.
+");
+
+      $input_options = array(
+        '1' => 'coming_soon',
+        '2' => 'coming_soon',
+        '3' => 'coming_soon',
+        '4' => 'coming_soon',
+        '5' => 'coming_soon',
+        '6' => 'coming_soon',
+        '7' => 'coming_soon',
+        '#' => 'go_back',
+        'i' => 'invalid_option',
+        't' => 'invalid_option'
+      );
+//@TODO:
+      $p_invalid_msg = v('Oops! That option is invalid. ');
+      $script->addRunIvrMenu($p_options_menu, $input_options, $p_invalid_msg);
+      $script->addGoto('%ivr_option_selected');
+
+      $script->addLabel('coming_soon');
+      $script->addGosub('claro_coming_soon', $options);
+      $script->addGoto('options_menu');
+
+      $script->addLabel('go_back');
+      $script->addReturn();
+      break;
+
 
     case 'claro_victories_script':
       $script = new VoipScript('claro_domestic_script');
-      $voice =  $options['voice'];
+      $voice = $options['voice'];
       voipvoice_set_current_voice($voice);
       $script->addLabel('options_menu');
       $p_options_menu = v("To hear about a recent victory in Boston, Massachusetts, press 1.
@@ -358,7 +416,7 @@ To return to the main menu, press the pound key. ");
       $script->addLabel('boston');
       //$script->addSay(v('Here is recording for "recent victory in Boston, Massachusetts"'));
       $episode = claro_get_episode(85); //Melnea
-      if(!$episode) {
+      if (!$episode) {
         $script->addSay("Invalid story id. ");
         $script->addLog("Invalid story id: $story_id. ");
         $script->addGoto('go_back');
@@ -373,31 +431,28 @@ To return to the main menu, press the pound key. ");
       break;
     case 'claro_coming_soon':
       $script = new VoipScript('claro_coming_soon');
-      $voice =  $options['voice'];
+      $voice = $options['voice'];
       voipvoice_set_current_voice($voice);
       $script->addSay(v('This part of the system is coming soon. '));
       $script->addReturn();
       break;
     case 'claro_sms_subscription_menu':
       $script = new VoipScript('claro_sms_subscription_menu');
-      $voice =  $options['voice'];
+      $voice = $options['voice'];
       voipvoice_set_current_voice($voice);
 
       $signup_number = $options['signup_number'];
       //$text = 'Welcome to Claro Que Sí! To subscribe, text the letter "J". To stop receiving text messages, text "S". For help, text "H". Msg & data rates may apply.';
-      $text =  variable_get('claro_sms_help',
+      $text = variable_get('claro_sms_help',
         'Welcome to The NannyVan App! To JOIN and receive weekly text messages, text the letter "J". To STOP receiving text messages, text "S". For HELP, text "H". Msg & data rates may apply.');
 
       $script->addSendText($text, $signup_number);
 
       $script->addLabel('options_menu');
-      $p_options_menu = v("The NannyVan App offers weekly text messages for
-      Housecleaners, Childcare Providers, and Personal Attendants about health
-      and safety, history, rights, and more. You should have already received a
-      text message with instructions to confirm your subscription. So check your
-      cell phone, and thanks for signing up!
-      To repeat this message, press the star key.
-      To go back to the main menu, press the pound key. ");
+      $p_options_menu = v("The Domestic Worker App offers weekly text messages for House cleaners, Childcare Providers, and caregivers about health and safety, history, rights, and more.
+You should have already received a text message with instructions to confirm your subscription. So check your cell phone, and thanks for signing up!”
+To repeat this message, press the star key.
+To go back to the main menu, press the pound key. ");
 
       $input_options = array(
         //'1' => 'confirm',
@@ -411,6 +466,37 @@ To return to the main menu, press the pound key. ");
       $script->addGoto('%ivr_option_selected');
 
       $script->addLabel('repeat');
+      $script->addGoto('options_menu');
+
+      $script->addLabel('go_back');
+      $script->addReturn();
+
+      break;
+    case 'domestic_workers_connect_script':
+      $script = new VoipScript('domestic_workers_connect_script');
+      $voice = $options['voice'];
+      voipvoice_set_current_voice($voice);
+      $p_options_menu = v("The National Domestic Workers Alliance (or N D W A) is the nation\'s
+          leading voice for dignity and fairness for the millions of domestic workers in the United States.
+          N D W A works for the respect, recognition, and inclusion in labor protections for domestic workers.
+          The national alliance is powered by 44 affiliate organizations—including our first local chapter
+          in Atlanta—of over 10,000 nannies, housekeepers, and caregivers for the elderly in 25 cities and
+          17 states. To speak with a person at the main office, call them at (352) 630-0862 or dial the star
+          key now. To go back to the main menu, press the pound key.");
+
+      $input_options = array(
+        //'1' => 'confirm',
+        '*' => 'call_ndwa',
+        '#' => 'go_back',
+        'i' => 'invalid_option',
+        't' => 'invalid_option'
+      );
+      $p_invalid_msg = v('Oops! That option is invalid. ');
+      $script->addRunIvrMenu($p_options_menu, $input_options, $p_invalid_msg);
+      $script->addGoto('%ivr_option_selected');
+
+      $script->addLabel('call_ndwa');
+      $script->addDial('+13526300862');
       $script->addGoto('options_menu');
 
       $script->addLabel('go_back');
@@ -520,7 +606,7 @@ To return to the main menu, press the pound key. ");
 
       $text = _claro_sms_process_request($options['text'], $options['caller_number'], $options['dest_number'], $options['call_id']);
 
-      if($text) {
+      if ($text) {
         //$footnote = variable_get('claro_sms_footnote', '');
         $script->addSendText($text);
         $script->addLog("sending $text");
@@ -572,7 +658,7 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
     $cmd = strtoupper($request[0]);
   }*/
 
-  if($cmd == 'Y') {
+  if ($cmd == 'Y') {
     //$nids = VoipNumber::getNidsByNumber($caller_number);
     $phone_number = claro_get_phone_number($caller_number);
     /*$voip_numbers = voipnumber_get_voip_numbers($caller_number, 'number');
@@ -584,7 +670,7 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
     }*/
     //@todo: if number is not published then resend sms
     //watchdog('debug', print_r($phone_number,true));
-    if($phone_number) {
+    if ($phone_number) {
       $phone_number->status = 1; //verify
       node_save($phone_number);
       $ret = variable_get('claro_sms_welcome', 'Welcome to NannyVan App');
@@ -593,48 +679,54 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
       $ret = t('Phone number not recognised.');
     }
   }
-  else if($cmd == 'S') {
-    //Stop getting messages
-    $nids = VoipNumber::getNidsByNumber($caller_number);
-    if ($nid = reset($nids)) {
-      node_delete($nid);
-      $ret = t('You\'ve unsubscribed from the Domestic Worker App and should not receive further messages. Should you choose to subscribe again, text any letter to the following number: (347) 967-5500
+  else {
+    if ($cmd == 'S') {
+      //Stop getting messages
+      $nids = VoipNumber::getNidsByNumber($caller_number);
+      if ($nid = reset($nids)) {
+        node_delete($nid);
+        $ret = t('You\'ve unsubscribed from the Domestic Worker App and should not receive further messages. Should you choose to subscribe again, text any letter to the following number: (347) 967-5500
 ');
-    }
-    else {
-      $ret = t('Number not in the list.');
-    }
-  }
-  else if($cmd == 'J') {
-    if (claro_get_phone_number($caller_number)) {
-      //Number already exists
-      $ret = t('Number already registered.');
-    }
-    else {
-      $node->type = 'phone_number';
-      $node->title = $caller_number;
-      $node->language = 'und';
-      $node->status = 1;
-      $node->field_phone_number['und'][0]['vnid'] = $caller_number;
-      $language = claro_number_to_lang($dest_number);
-      $node->field_language['und'][0]['value'] = $language;
-      // create the node
-      node_save($node);
-      //@todo: verify number
-      if($node->nid){
-        $ret = t('Welcome to the Domestic Worker App! To STOP receiving text messages, text "S". For HELP, text "H". Msg & data rates may apply.');
       }
       else {
-        watchdog('claro', 'Error saving phone number: '.print_r($node, true), array(), WATCHDOG_ERROR);
-        $ret = t('System error. Please try again later.');
+        $ret = t('Number not in the list.');
       }
     }
-  }
-  else if($cmd == 'H') {
-    $ret = $help_msg;
-  }
-  else {
-    $ret = t('Unknown command. ') . $help_msg;
+    else {
+      if ($cmd == 'J') {
+        if (claro_get_phone_number($caller_number)) {
+          //Number already exists
+          $ret = t('Number already registered.');
+        }
+        else {
+          $node->type = 'phone_number';
+          $node->title = $caller_number;
+          $node->language = 'und';
+          $node->status = 1;
+          $node->field_phone_number['und'][0]['vnid'] = $caller_number;
+          $language = claro_number_to_lang($dest_number);
+          $node->field_language['und'][0]['value'] = $language;
+          // create the node
+          node_save($node);
+          //@todo: verify number
+          if ($node->nid) {
+            $ret = t('Welcome to the Domestic Worker App! To STOP receiving text messages, text "S". For HELP, text "H". Msg & data rates may apply.');
+          }
+          else {
+            watchdog('claro', 'Error saving phone number: ' . print_r($node, TRUE), array(), WATCHDOG_ERROR);
+            $ret = t('System error. Please try again later.');
+          }
+        }
+      }
+      else {
+        if ($cmd == 'H') {
+          $ret = $help_msg;
+        }
+        else {
+          $ret = t('Unknown command. ') . $help_msg;
+        }
+      }
+    }
   }
 
   return $ret;
@@ -648,7 +740,7 @@ function claro_log($message) {
 function claro_get_episode($nid) {
   //watchdog('debug', $nid);
   $n = node_load($nid);
-  if(!$n) {
+  if (!$n) {
     return NULL;
   }
   $episode = array();
@@ -667,6 +759,7 @@ function claro_get_episode($nid) {
   }
   return $episode;
 }
+
 /*
 * Returns array of claro nodes
 */
