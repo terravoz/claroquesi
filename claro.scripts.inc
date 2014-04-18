@@ -351,7 +351,7 @@ To return to the main menu, press the pound key. ");
       $script->addReturn();
 
       break;
-    case 'claro_victories_script':
+    case 'claro_california':
       $script = new VoipScript('claro_california');
       $voice = $options['voice'];
       voipvoice_set_current_voice($voice);
@@ -370,13 +370,13 @@ To go back to the main menu for the Domestic Worker App, press the pound key.
 ");
 
       $input_options = array(
-        '1' => 'coming_soon',
-        '2' => 'coming_soon',
-        '3' => 'coming_soon',
-        '4' => 'coming_soon',
-        '5' => 'coming_soon',
-        '6' => 'coming_soon',
-        '7' => 'coming_soon',
+        '1' => 'domestic_worker',
+        '2' => 'min_wage',
+        '3' => 'meal',
+        '4' => 'info_meals',
+        '5' => 'info_workers',
+        '6' => 'rights',
+        '7' => 'timesheets',
         '#' => 'go_back',
         'i' => 'invalid_option',
         't' => 'invalid_option'
@@ -386,8 +386,32 @@ To go back to the main menu for the Domestic Worker App, press the pound key.
       $script->addRunIvrMenu($p_options_menu, $input_options, $p_invalid_msg);
       $script->addGoto('%ivr_option_selected');
 
-      $script->addLabel('coming_soon');
-      $script->addGosub('claro_coming_soon', $options);
+      $script->addLabel('domestic_worker');
+      $script->addSay(v('Here goes audio for the definition of a domestic worker under California Law'));
+      $script->addGoto('options_menu');
+
+      $script->addLabel('min_wage');
+      $script->addSay(v('Here goes audio for minimum wage and overtime pay'));
+      $script->addGoto('options_menu');
+
+      $script->addLabel('meal');
+      $script->addSay(v('Here goes audio for meal breaks'));
+      $script->addGoto('options_menu');
+
+      $script->addLabel('info_meals');
+      $script->addSay(v('Here goes audio for info about meals and lodging or being fired'));
+      $script->addGoto('options_menu');
+
+      $script->addLabel('info_workers');
+      $script->addSay(v('Here goes audio for info about workers comp, harassment, and immigration'));
+      $script->addGoto('options_menu');
+
+      $script->addLabel('rights');
+      $script->addSay(v('Here goes audio for the rights that domestic workers in California seek to achieve'));
+      $script->addGoto('options_menu');
+
+      $script->addLabel('timesheets');
+      $script->addSay(v('Here goes audio for timesheets and recordkeeping'));
       $script->addGoto('options_menu');
 
       $script->addLabel('go_back');
