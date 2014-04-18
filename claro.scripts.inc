@@ -341,7 +341,7 @@ To return to the main menu, press the pound key. ");
 
       $script->addLabel('california');
       $script->addGosub('claro_california', $options);
-      $script->addHangup();
+      $script->addGoto('go_back');
 
       $script->addLabel('coming_soon');
       $script->addGosub('claro_coming_soon', $options);
@@ -377,11 +377,12 @@ To go back to the main menu for the Domestic Worker App, press the pound key.
         '5' => 'info_workers',
         '6' => 'rights',
         '7' => 'timesheets',
+        '*' => 'repeat',
         '#' => 'go_back',
         'i' => 'invalid_option',
         't' => 'invalid_option'
       );
-//@TODO:
+
       $p_invalid_msg = v('Oops! That option is invalid. ');
       $script->addRunIvrMenu($p_options_menu, $input_options, $p_invalid_msg);
       $script->addGoto('%ivr_option_selected');
@@ -414,8 +415,13 @@ To go back to the main menu for the Domestic Worker App, press the pound key.
       $script->addSay(v('Here goes audio for timesheets and recordkeeping'));
       $script->addGoto('options_menu');
 
+      $script->addLabel('repeat');
+      $script->addGoto('play_story');
+
       $script->addLabel('go_back');
       $script->addReturn();
+
+
       break;
 
 
