@@ -614,6 +614,7 @@ To go back to the main menu, press the pound key. ");
       $script->addReturn();
       break;
 */
+    
     case 'claro_sms_handler_script':
       //Claro VoIP script for Text channel
       $script = new VoipScript('claro_sms_handler_script');
