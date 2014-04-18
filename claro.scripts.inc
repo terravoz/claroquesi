@@ -317,10 +317,10 @@ If you want to start over, hear the list of episodes or the main menu, press any
       voipvoice_set_current_voice($voice);
       $script->addLabel('options_menu');
       $p_options_menu = v("Directory for Info about your rights in various states.
-To hear about the rights of domestic workers in New York, press 1.
-Massachusetts, press 2.
-California, press 3.
-To return to the main menu, press the pound key. ");
+      To hear about the rights of domestic workers in New York, press 1.
+      Massachusetts, press 2.
+      California, press 3.
+      To return to the main menu, press the pound key. ");
 
       $input_options = array(
         '1' => 'ny',
@@ -506,11 +506,11 @@ To go back to the main menu, press the pound key. ");
       $script = new VoipScript('domestic_workers_connect_script');
       $voice = $options['voice'];
       voipvoice_set_current_voice($voice);
-      $p_options_menu = v("The National Domestic Workers Alliance (or N D W A) is the nation\'s
+      $p_options_menu = v("The National Domestic Workers Alliance (or N D W A) is the nation's
           leading voice for dignity and fairness for the millions of domestic workers in the United States.
           N D W A works for the respect, recognition, and inclusion in labor protections for domestic workers.
-          The national alliance is powered by 44 affiliate organizations—including our first local chapter
-          in Atlanta—of over 10,000 nannies, housekeepers, and caregivers for the elderly in 25 cities and
+          The national alliance is powered by 44 affiliate organizations including our first local chapter
+          in Atlanta of over 10,000 nannies, housekeepers, and caregivers for the elderly in 25 cities and
           17 states. To speak with a person at the main office, call them at (352) 630-0862 or dial the star
           key now. To go back to the main menu, press the pound key.");
 
