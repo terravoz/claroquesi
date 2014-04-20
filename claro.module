@@ -115,7 +115,8 @@ function claro_form_alter(&$form, &$form_state, $form_id) {
     $form['actions']['submit']['#weight'] = 1;
     $form['actions']['preview']['#weight'] = 0;
 
-    $form['actions']['submit']['#attributes'] = array('onclick' => 'alert();');
+    $form['actions']['submit']['#attributes'] =
+      array('onclick' => 'return confirm("It is important to test your message blast before actually doing it. Are you sure you want to start sending your messages now?");');
 
     $form['actions']['preview']['#submit'] = array('claro_broadcast_node_test');
     //so the $form_state['nid']  is available
