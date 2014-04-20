@@ -112,6 +112,9 @@ function claro_form_alter(&$form, &$form_state, $form_id) {
     $form['actions']['submit']['#value'] = t('Start');
     $form['actions']['preview']['#value'] = t('Test');
 
+    $form['actions']['submit']['#weight'] = 1;
+    $form['actions']['preview']['#weight'] = 0;
+
     $form['actions']['preview']['#submit'] = array('claro_broadcast_node_test');
     //so the $form_state['nid']  is available
     //$form['actions']['submit']['#submit'][]  = 'claro_broadcast_node_form_submit';
