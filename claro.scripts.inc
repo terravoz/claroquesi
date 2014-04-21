@@ -133,15 +133,15 @@ To learn about the NannyVan and the NannyVan App, press 6.
 To repeat this menu, press the star key.
 ");*/
 
-      $p_options_menu = v("Main Menu
-To sign up to receive weekly updates by text, press 1.
-To learn about health and safety tips, press 2.
-To know your rights as a domestic worker, press 3.
-To learn about landmark victories for domestic workers, press 4.
-To learn about the Domestic Worker App, press 5.
-To be connected with the National Domestic Workers Alliance, press 6.
-To repeat this menu, press the star key.
-");
+      $p_options_menu = v("Main Menu.
+      To sign up to receive weekly updates by text, press 1.
+      To learn about health and safety tips, press 2.
+      To know your rights as a domestic worker, press 3.
+      To learn about landmark victories for domestic workers, press 4.
+      To learn about the Domestic Worker App, press 5.
+      To be connected with the National Domestic Workers Alliance, press 6.
+      To repeat this menu, press the star key.
+      ");
 
       $input_options = array(
         '1' => 'sms_subscription',
@@ -358,15 +358,15 @@ If you want to start over, hear the list of episodes or the main menu, press any
 
       $script->addLabel('options_menu');
       $p_options_menu = v("Your rights as a domestic worker in California.
-For the definition of a domestic worker under California Law, press 1
-For minimum wage and overtime pay, press 2
-For meal breaks, press 3
-For info about meals and lodging or being fired, press 4
-For info about workers comp, harassment, and immigration, press 5
-To hear about the rights that domestic workers in California seek to achieve, press 6
-For timesheets and recordkeeping, press 7.
-To repeat this menu, press the star key.
-To go back to the main menu for the Domestic Worker App, press the pound key.
+      For the definition of a domestic worker under California Law, press 1
+      For minimum wage and overtime pay, press 2.
+      For meal breaks, press 3.
+      For info about meals and lodging or being fired, press 4.
+      For info about workers comp, harassment, and immigration, press 5.
+      To hear about the rights that domestic workers in California seek to achieve, press 6.
+      For timesheets and recordkeeping, press 7.
+      To repeat this menu, press the star key.
+      To go back to the main menu for the Domestic Worker App, press the pound key.
 ");
 
       $input_options = array(
