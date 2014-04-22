@@ -152,7 +152,7 @@ To repeat this menu, press the star key.
         '5' => 'get_information',
         '6' => 'domestic_workers_connect', //@todo: new
         '*' => 'repeat',
-        '#' => 'hang_up',
+        '#' => 'invalid_option',
         'i' => 'invalid_option',
         't' => 'invalid_option'
       );
@@ -165,7 +165,9 @@ To repeat this menu, press the star key.
       $script->addGoto('options_menu');
 
       $script->addLabel('get_information');
-      $script->addSay(v('Here is recording for "ABOUT THE DOMESTIC WORKER APP"'));
+      $script->addGetInput(v('Here is recording for "ABOUT THE DOMESTIC WORKER APP"'), 1);
+      $script->addGotoIf('options_menu', "^%input_digits");
+      //$script->addSay(v('Here is recording for "ABOUT THE DOMESTIC WORKER APP"'));
       $script->addGoto('options_menu');
 
       $script->addLabel('sms_subscription');
@@ -198,7 +200,7 @@ To repeat this menu, press the star key.
       $script->addGoto('options_menu');
 
       $script->addLabel('invalid_option');
-      $script->addGoto('options_menu');
+      //$script->addGoto('options_menu');
 
       $script->addReturn();
       break;
@@ -526,6 +528,7 @@ To go back to the main menu, press the pound key. ");
       $script->addGoto('%ivr_option_selected');
 
       $script->addLabel('call_ndwa');
+      $script->addSay(v('Your call will now be transferred to N D W A. '));
       $script->addDial('+13526300862');
       $script->addGoto('options_menu');
 
