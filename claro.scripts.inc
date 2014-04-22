@@ -454,7 +454,9 @@ To return to the main menu, press the pound key. ");
         $script->addGoto('go_back');
       }
       else {
-        $script->addSay($episode['body']);
+        //$script->addSay($episode['body']);
+        $script->addGetInput($episode['body'], 1);
+        $script->addGotoIf('options_menu', "^%input_digits");
       }
       $script->addGoto('options_menu');
 
