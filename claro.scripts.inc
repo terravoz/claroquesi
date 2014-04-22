@@ -99,7 +99,7 @@ function claro_voipscript_load_script($script_name, $options = NULL) {
       $voice = $options['voice'];
       voipvoice_set_current_voice($voice);
       $script->addSay(v("If this is an emergency, hang up and dial 9 1 1. "));
-      $script->addSay(v("Welcome house cleaners, nannies, and caregivers! You have reached the Domestic Worker App — accessible by any kind of phone. "));
+      $script->addSay(v("Welcome house cleaners, nannies, and caregivers! You have reached the Domestic Worker App - accessible by any kind of phone. "));
 
       /* $latest_news = _nannyvan_news_get_last_news();
        $script->addSay(v("Latest news from the NannyVan. "));
@@ -211,7 +211,7 @@ To repeat this menu, press the star key.
 
       $script->addLabel('options_menu');
       $p_options_menu = v("Directory for Health and Safety Tips.
-To learn about cleaning products that can harm — or even kill — you, press 1.
+To learn about cleaning products that can harm - or even kill - you, press 1.
 Preventing bed bug infestation, press 2.
 Staying safe in style, press 3.
 To repeat this menu, press the star key.
