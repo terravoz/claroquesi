@@ -254,6 +254,6 @@ function claro_remove_tags_sitewide($entity, $context = array()) {
   watchdog('debug', print_r($entity, true));
 
   if($context['tag']) {
-    taxonomy_term_delete($tid);
+    taxonomy_term_delete($context['tag']);
   }
 }
