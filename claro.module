@@ -185,3 +185,37 @@ function _d($obj) {
   print '</pre>';
   die();
 }
+
+function claro_action_info() {
+  return array(
+    'claro_remove_tags' => array( // declare the function name to be used. Replace the name with your function name
+        'type' => 'entity', // can be node,comment etc
+        'label' => t('Remove tag from selected contacts'), // the name of the operation which is displayed to the user.
+        'configurable' => FALSE,
+        'vbo_configurable' => TRUE,
+        'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
+      ),
+    );
+}
+
+function claro_claro_remove_tags_form($options) {
+  if ($terms = taxonomy_get_tree(2)) {
+    $tids = array();
+    foreach ($terms as $term) {
+      // Do something with $term->tid or $term->name
+      $tids[$term->tid] = $term->name;
+    }
+  }
+  $form = array();
+  $form['tag'] = array(
+    '#type' => 'select',
+    '#title' => t('Choose groups to remove'),
+    '#options' => $tids,
+    '#default_value' => !empty($options['tag']) ? $options['tag'] : '',
+  );
+  return $form;
+}
+
+function claro_remove_tags($entity, $context = array()) {
+
+}
