@@ -192,6 +192,13 @@ function claro_action_info() {
         'vbo_configurable' => TRUE,
         'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
       ),
+    'claro_remove_tags_sitewide' => array( // declare the function name to be used. Replace the name with your function name
+      'type' => 'entity', // can be node,comment etc
+      'label' => t('Remove tag from the system'), // the name of the operation which is displayed to the user.
+      'configurable' => FALSE,
+      'vbo_configurable' => TRUE,
+      'pass rows' => FALSE, // this will ensure that the entire views row is passed as part of the context in your action callback.
+    ),
     );
 }
 
@@ -231,5 +238,22 @@ watchdog('debug', print_r($context, true));
     }
     watchdog('debug', print_r($entity, true));
    node_save($entity);
+  }
+}
+
+function claro_remove_tags_sitewide_form($options) {
+  return claro_remove_tags_form($options);
+}
+
+function claro_remove_tags_sitewide_submit($form, $form_state) {
+  return claro_remove_tags_submit($form, $form_state);
+}
+
+function claro_remove_tags_sitewide($entity, $context = array()) {
+  watchdog('debug', print_r($context, true));
+  watchdog('debug', print_r($entity, true));
+
+  if($context['tag']) {
+    taxonomy_term_delete($tid);
   }
 }

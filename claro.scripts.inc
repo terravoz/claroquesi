@@ -581,7 +581,7 @@ To go back to the main menu, press the pound key. ");
 
       $script->addLabel('call_ndwa');
       $script->addSay(v('Your call will now be transferred to N D W A. '));
-      $script->addDial('+13526300862');
+      $script->addDial('+13526390862');
       $script->addGoto('options_menu');
 
       $script->addLabel('go_back');
