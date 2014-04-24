@@ -216,7 +216,7 @@ function claro_remove_tags_form($options) {
   return $form;
 }
 
-function claro_remove_tags_form_submit($form, $form_state) {
+function claro_remove_tags_submit($form, $form_state) {
   $return = array();
   $return['tag'] = $form_state['values']['tag'];
   return $return;
