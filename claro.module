@@ -230,6 +230,6 @@ watchdog('debug', print_r($context, true));
       }
     }
     watchdog('debug', print_r($entity, true));
-   entity_save($entity->type, $entity);
+   node_save($entity);
   }
 }
