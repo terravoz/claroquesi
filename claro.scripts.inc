@@ -436,14 +436,12 @@ If you want to start over, hear the list of episodes or the main menu, press any
       $voice = $options['voice'];
       voipvoice_set_current_voice($voice);
 
-      $prompt = new VoipPrompt($options['prompt']);
-
       $script->addLabel('play_story');
       $p_episode_intro = v("You're about to listen to a new episode, but listen up.
 If you want to start over, hear the list of episodes or the main menu, press any key at any time.");
 
       $p_episode_prompt[] = $p_episode_intro;
-      $p_episode_prompt[] = $prompt;
+      $p_episode_prompt[] = $options['prompt'];
 
       $script->addGetInput($p_episode_prompt, 1);
 
