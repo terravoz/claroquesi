@@ -152,7 +152,7 @@ function claro_get_phone_number($phone_number) {
   $query = $query->execute();
   $result = $query->fetchObject();
   if($result) {
-    $phone_number = node_load($result->nid);
+    $phone_number = node_load($result->entity_id);
     return $phone_number;
   }
   return NULL;
