@@ -220,5 +220,5 @@ function claro_remove_tags_submit($form, $form_state) {
 }
 
 function claro_remove_tags($entity, $context = array()) {
-watchdog('debug', print_r($entity), true);
+watchdog('debug', print_r($entity, true));
 }
