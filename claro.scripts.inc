@@ -390,37 +390,37 @@ If you want to start over, hear the list of episodes or the main menu, press any
       $script->addGoto('%ivr_option_selected');
 
       $script->addLabel('domestic_worker');
-      $options['prompt'] = v('Here goes audio for the definition of a domestic worker under California Law');
+      $options['prompt'] = 'Here goes audio for the definition of a domestic worker under California Law';
       $script->addGoSub('claro_california_play_script', $options);
       $script->addGoto('options_menu');
 
       $script->addLabel('min_wage');
-      $options['prompt'] = v('Here goes audio for minimum wage and overtime pay');
+      $options['prompt'] = 'Here goes audio for minimum wage and overtime pay';
       $script->addGoSub('claro_california_play_script', $options);
       $script->addGoto('options_menu');
 
       $script->addLabel('meal');
-      $options['prompt'] = v('Here goes audio for meal breaks');
+      $options['prompt'] = 'Here goes audio for meal breaks';
       $script->addGoSub('claro_california_play_script', $options);
       $script->addGoto('options_menu');
 
       $script->addLabel('info_meals');
-      $options['prompt'] = v('Here goes audio for info about meals and lodging or being fired');
+      $options['prompt'] = 'Here goes audio for info about meals and lodging or being fired';
       $script->addGoSub('claro_california_play_script', $options);
       $script->addGoto('options_menu');
 
       $script->addLabel('info_workers');
-      $options['prompt'] = v('Here goes audio for info about workers comp, harassment, and immigration');
+      $options['prompt'] = 'Here goes audio for info about workers comp, harassment, and immigration';
       $script->addGoSub('claro_california_play_script', $options);
       $script->addGoto('options_menu');
 
       $script->addLabel('rights');
-      $options['prompt'] = v('Here goes audio for the rights that domestic workers in California seek to achieve');
+      $options['prompt'] = 'Here goes audio for the rights that domestic workers in California seek to achieve';
       $script->addGoSub('claro_california_play_script', $options);
       $script->addGoto('options_menu');
 
       $script->addLabel('timesheets');
-      $options['prompt'] = v('Here goes audio for timesheets and recordkeeping');
+      $options['prompt'] = 'Here goes audio for timesheets and recordkeeping';
       $script->addGoSub('claro_california_play_script', $options);
       $script->addGoto('options_menu');
 
@@ -441,7 +441,7 @@ If you want to start over, hear the list of episodes or the main menu, press any
 If you want to start over, hear the list of episodes or the main menu, press any key at any time.");
 
       $p_episode_prompt[] = $p_episode_intro;
-      $p_episode_prompt[] = $options['prompt'];
+      $p_episode_prompt[] = v($options['prompt']);
 
       $script->addGetInput($p_episode_prompt, 1);
 
