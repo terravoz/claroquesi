@@ -198,7 +198,7 @@ function claro_action_info() {
     );
 }
 
-function claro_claro_remove_tags_form($options) {
+function claro_remove_tags_form($options) {
   if ($terms = taxonomy_get_tree(2)) {
     $tids = array();
     foreach ($terms as $term) {
