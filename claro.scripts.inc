@@ -267,7 +267,7 @@ To return to the main menu, press the pound key.
       $voice = $options['voice'];
       voipvoice_set_current_voice($voice);
 
-      $episode = claro_get_episode($story_id);
+      $episode = claro_get_episode($story_id, $voice);
       if (!$episode) {
         $script->addSay("Invalid story id. ");
         $script->addLog("Invalid story id: $story_id. ");
@@ -497,7 +497,7 @@ To return to the main menu, press the pound key. ");
 
       $script->addLabel('boston');
       //$script->addSay(v('Here is recording for "recent victory in Boston, Massachusetts"'));
-      $episode = claro_get_episode(85); //Melnea
+      $episode = claro_get_episode(85, $voice); //Melnea
       if (!$episode) {
         $script->addSay("Invalid story id. ");
         $script->addLog("Invalid story id: $story_id. ");
@@ -823,17 +823,22 @@ function claro_log($message) {
   watchdog('claro', $message);
 }
 
-function claro_get_episode($nid) {
+function claro_get_episode($nid, $voice) {
   //watchdog('debug', $nid);
   $n = node_load($nid);
   if (!$n) {
     return NULL;
   }
+  if($voice == 'claro-spanish') {
+    $field_audio = $n->field_episode_audio_spanish;
+  }
+  else {
+    $field_audio = $n->field_audio;
+  }
   $episode = array();
   $episode['nid'] = $n->nid;
   $episode['changed'] = $n->field_episode_date['und'][0]['value'];
 
-  $field_audio = $n->field_audio;
   if ($field_audio['und'][0]) {
     $audio_url = file_create_url($field_audio['und'][0]['uri']);
     $episode['body'] = $audio_url;
