@@ -296,8 +296,10 @@ function claro_remove_tags_sitewide($entity, $context = array()) {
   watchdog('debug', print_r($context, true));
   watchdog('debug', print_r($entity, true));
 
-  if($context['tag']) {
-    taxonomy_term_delete($context['tag']);
+  if($context['tags']) {
+    foreach($context['tags'] as $tid=>$value) {
+      taxonomy_term_delete($tid);
+    }
   }
 }
 
@@ -314,8 +316,15 @@ function claro_add_tags($entity, $context = array()) {
   //watchdog('debug', print_r($entity, true));
 
   if($context['tags']) {
-    foreach($context['tags'] as $tid=>$value) {
-      $entity->field_groups['und'][$tid] = $value;
+    //First merge with existing
+    foreach($entity->field_groups['und'] as $delta => $groups) {
+      if(in_array($groups['tid'], $context['tags'])) {
+        unset($context['tags'][$groups['tid']]);
+      }
+    }
+
+    foreach($context['tags'] as $tid => $value) {
+      $entity->field_groups['und'][]['tid'] = $tid;
     }
     node_save($entity);
   }
