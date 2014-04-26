@@ -224,11 +224,11 @@ function claro_remove_tags_form($options) {
     }
   }
   $form = array();
-  $form['tag'] = array(
+  $form['tags'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Choose groups to remove'),
     '#options' => $tids,
-    '#default_value' => !empty($options['tag']) ? $options['tag'] : '',
+    '#default_value' => !empty($options['tags']) ? $options['tags'] : '',
   );
   return $form;
 }
@@ -236,17 +236,22 @@ function claro_remove_tags_form($options) {
 function claro_remove_tags_submit($form, $form_state) {
   watchdog('debug', print_r($form_state['values'], true));
   $return = array();
-  $return['tag'] = $form_state['values']['tag'];
+  foreach($form_state['values']['tags'] as $tid => $enabled) {
+    if($enabled) {
+      $return['tags'][$tid] = $tid;
+    }
+  }
+  //$return['tags'] = $form_state['values']['tags'];
   return $return;
 }
 
 function claro_remove_tags($entity, $context = array()) {
 watchdog('debug', print_r($context, true));
-  watchdog('debug', print_r($entity, true));
+  //watchdog('debug', print_r($entity, true));
 
-  if($context['tag']) {
+  if($context['tags']) {
     foreach($entity->field_groups['und'] as $delta => $groups) {
-      if($groups['tid'] == $context['tag']) {
+      if(in_array($groups['tid'], $context['tags'])) {
         unset($entity->field_groups['und'][$delta]);
       }
     }
