@@ -241,7 +241,7 @@ function claro_return_tags_form($options, $op = 'add') {
     $form['new_tags'] = array(
       '#type' => 'textfield',
       '#default_value' => '',
-      '#title' => 'Add Tags',
+      '#title' => 'or create new groups',
       '#autocomplete_path' => 'taxonomy/autocomplete/field_groups',
       '#element_validate' => array('taxonomy_autocomplete_validate'),
     );
