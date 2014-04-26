@@ -215,7 +215,7 @@ function claro_action_info() {
     ),
     'claro_remove_consent' => array( // declare the function name to be used. Replace the name with your function name
       'type' => 'entity', // can be node,comment etc
-      'label' => t('Add consent'), // the name of the operation which is displayed to the user.
+      'label' => t('Remove consent'), // the name of the operation which is displayed to the user.
       'configurable' => FALSE,
       'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
     ),
