@@ -237,6 +237,15 @@ function claro_return_tags_form($options, $op = 'add') {
     '#options' => $tids,
     '#default_value' => !empty($options['tags']) ? $options['tags'] : '',
   );
+  if($op == 'add') {
+    $form['new_tags'] = array(
+      '#type' => 'textfield',
+      '#default_value' => '',
+      '#title' => 'Add Tags',
+      '#autocomplete_path' => 'taxonomy/autocomplete/field_groups',
+      '#element_validate' => array('taxonomy_autocomplete_validate'),
+    );
+  }
   return $form;
 }
 
