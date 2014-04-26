@@ -186,6 +186,13 @@ function _d($obj) {
 /*VBO Actions*/
 function claro_action_info() {
   return array(
+    'claro_add_tags' => array( // declare the function name to be used. Replace the name with your function name
+      'type' => 'entity', // can be node,comment etc
+      'label' => t('Add tag to selected contacts'), // the name of the operation which is displayed to the user.
+      'configurable' => FALSE,
+      'vbo_configurable' => TRUE,
+      'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
+    ),
     'claro_remove_tags' => array( // declare the function name to be used. Replace the name with your function name
         'type' => 'entity', // can be node,comment etc
         'label' => t('Remove tag from selected contacts'), // the name of the operation which is displayed to the user.
@@ -274,6 +281,26 @@ function claro_remove_tags_sitewide($entity, $context = array()) {
 
   if($context['tag']) {
     taxonomy_term_delete($context['tag']);
+  }
+}
+
+function claro_add_tags_form($options) {
+  return claro_remove_tags_form($options);
+}
+
+function claro_add_tags_submit($form, $form_state) {
+  return claro_remove_tags_submit($form, $form_state);
+}
+
+function claro_add_tags($entity, $context = array()) {
+  watchdog('debug', print_r($context, true));
+  //watchdog('debug', print_r($entity, true));
+
+  if($context['tags']) {
+    foreach($context['tags'] as $tid=>$value) {
+      $entity->field_groups['und'][$tid] = $value;
+    }
+    node_save($entity);
   }
 }
 
