@@ -183,6 +183,7 @@ function _d($obj) {
   die();
 }
 
+/*VBO Actions*/
 function claro_action_info() {
   return array(
     'claro_remove_tags' => array( // declare the function name to be used. Replace the name with your function name
@@ -199,6 +200,18 @@ function claro_action_info() {
       'vbo_configurable' => TRUE,
       'pass rows' => FALSE, // this will ensure that the entire views row is passed as part of the context in your action callback.
     ),
+    'claro_add_consent' => array( // declare the function name to be used. Replace the name with your function name
+      'type' => 'entity', // can be node,comment etc
+      'label' => t('Add consent'), // the name of the operation which is displayed to the user.
+      'configurable' => FALSE,
+      'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
+    ),
+    'claro_remove_consent' => array( // declare the function name to be used. Replace the name with your function name
+      'type' => 'entity', // can be node,comment etc
+      'label' => t('Add consent'), // the name of the operation which is displayed to the user.
+      'configurable' => FALSE,
+      'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
+    ),
     );
 }
 
@@ -212,7 +225,7 @@ function claro_remove_tags_form($options) {
   }
   $form = array();
   $form['tag'] = array(
-    '#type' => 'select',
+    '#type' => 'checkboxes',
     '#title' => t('Choose groups to remove'),
     '#options' => $tids,
     '#default_value' => !empty($options['tag']) ? $options['tag'] : '',
@@ -221,6 +234,7 @@ function claro_remove_tags_form($options) {
 }
 
 function claro_remove_tags_submit($form, $form_state) {
+  watchdog('debug', print_r($form_state, true));
   $return = array();
   $return['tag'] = $form_state['values']['tag'];
   return $return;
@@ -256,4 +270,14 @@ function claro_remove_tags_sitewide($entity, $context = array()) {
   if($context['tag']) {
     taxonomy_term_delete($context['tag']);
   }
+}
+
+function claro_add_consent($entity, $context = array()) {
+  $entity->field_consented['und'][0]['value'] = 'yes';
+  node_save($entity);
+}
+
+function claro_remove_consent($entity, $context = array()) {
+  $entity->field_consented['und'][0]['value'] = 'no';
+  node_save($entity);
 }
