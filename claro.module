@@ -68,7 +68,7 @@ function claro_node_presave($node) {
     if(!$node->title) {
       $node->title = $node->field_phone_number['und'][0]['vnid'];
     }
-    if($node->status == 0) {
+    if($node->field_consented['und'][0]['value'] == 'no') {
       watchdog('claro', 'sending verification');
       //Send verification only for guest users
       $number = $node->field_phone_number['und'][0]['vnid'];
@@ -100,8 +100,8 @@ function claro_form_alter(&$form, &$form_state, $form_id) {
     drupal_add_js(drupal_get_path('module', 'claro').'/claro.js');
     drupal_set_title(t('Subscribe to SMS announcements'));
 
-    $form["options"]["#title"] = t("Send Invitation Option");
-    $form["options"]["status"]["#title"] = t("Add to the list without sending invitation?");
+    //$form["options"]["#title"] = t("Send Invitation Option");
+    //$form["options"]["status"]["#title"] = t("Add to the list without sending invitation?");
     $form["options"]["promote"]["#type"] = "hidden";
     $form["options"]["sticky"]["#type"] = "hidden";
   }
@@ -110,7 +110,7 @@ function claro_form_alter(&$form, &$form_state, $form_id) {
     drupal_set_title(t('Create a Message'));
     drupal_add_js(drupal_get_path('module', 'claro').'/claro.js');
     $form['actions']['submit']['#value'] = t('Start');
-    $form['actions']['preview']['#value'] = t('Test');
+    //$form['actions']['preview']['#value'] = t('Test');
 
     $form['actions']['submit']['#weight'] = 1;
     $form['actions']['preview']['#weight'] = 0;
@@ -118,7 +118,7 @@ function claro_form_alter(&$form, &$form_state, $form_id) {
     $form['actions']['submit']['#attributes'] =
       array('onclick' => 'return confirm("It is important to test your message blast before actually doing it. Are you sure you want to start sending your messages now?");');
 
-    $form['actions']['preview']['#submit'] = array('claro_broadcast_node_test');
+    //$form['actions']['preview']['#submit'] = array('claro_broadcast_node_test');
     //so the $form_state['nid']  is available
     //$form['actions']['submit']['#submit'][]  = 'claro_broadcast_node_form_submit';
   }
@@ -129,6 +129,7 @@ function claro_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /*Send announcement to test number*/
+/*
 function claro_broadcast_node_test($form, &$form_state) {
   $call = new VoipCall();
   $call->setDestNumber($form_state['values']['field_test_phone_number']['und'][0]['vnid']);
@@ -138,7 +139,7 @@ function claro_broadcast_node_test($form, &$form_state) {
   drupal_set_message('SMS sent to test number '.$form_state['values']['field_test_phone_number']['und'][0]['vnid']);
 
   $form_state['rebuild'] = TRUE;
-}
+}*/
 
 
 
@@ -338,4 +339,23 @@ function claro_add_consent($entity, $context = array()) {
 function claro_remove_consent($entity, $context = array()) {
   $entity->field_consented['und'][0]['value'] = 'no';
   node_save($entity);
+}
+
+function claro_migrate_numbers() {
+  $query = new EntityFieldQuery();
+  $entities = $query->entityCondition('entity_type', 'node')
+    ->propertyCondition('type', 'phone_number')
+    ->execute();
+  if (!empty($entities['node'])) {
+    foreach($entities['node'] as $ent_node) {
+      $node = node_load($ent_node->nid);
+      if($node->status) {
+        $node->field_consented['und'][0]['value'] = 'yes';
+      }
+      else {
+        $node->field_consented['und'][0]['value'] = 'no';
+      }
+      node_save($node);
+    }
+  }
 }
