@@ -307,7 +307,7 @@ function claro_add_tags_form($options) {
 
 function claro_add_tags_submit($form, $form_state) {
   watchdog('debug', print_r($form_state['values'], true));
-  $return =  claro_return_tags_submit($form, $form_state);
+  //$return =  claro_return_tags_submit($form, $form_state);
   //dpm($form_state['values']);
   /*foreach($form_state['values']['new_tags'] as $tid => $enabled) {
       $return['tags'][$tid] = $tid;
