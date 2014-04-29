@@ -1,4 +1,6 @@
 <?php
+//@todo: hide opt in field for anon users
+//@todo: vbo for remove system tags
 /**
  * @file Provides VoIP Drupal functionality for the Claro project
  */
@@ -68,7 +70,7 @@ function claro_node_presave($node) {
     if(!$node->title) {
       $node->title = $node->field_phone_number['und'][0]['vnid'];
     }
-    if($node->field_consented['und'][0]['value'] == 'no') {
+    if($node->field_opt_in['und'][0]['value'] == 'no') {
       watchdog('claro', 'sending verification');
       //Send verification only for guest users
       $number = $node->field_phone_number['und'][0]['vnid'];
@@ -189,34 +191,34 @@ function claro_action_info() {
   return array(
     'claro_add_tags' => array( // declare the function name to be used. Replace the name with your function name
       'type' => 'entity', // can be node,comment etc
-      'label' => t('Add tag to selected contacts'), // the name of the operation which is displayed to the user.
+      'label' => t('Add group name to selected contacts'), // the name of the operation which is displayed to the user.
       'configurable' => FALSE,
       'vbo_configurable' => TRUE,
       'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
     ),
     'claro_remove_tags' => array( // declare the function name to be used. Replace the name with your function name
         'type' => 'entity', // can be node,comment etc
-        'label' => t('Remove tag from selected contacts'), // the name of the operation which is displayed to the user.
+        'label' => t('Remove group name from selected contacts'), // the name of the operation which is displayed to the user.
         'configurable' => FALSE,
         'vbo_configurable' => TRUE,
         'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
       ),
     'claro_remove_tags_sitewide' => array( // declare the function name to be used. Replace the name with your function name
       'type' => 'entity', // can be node,comment etc
-      'label' => t('Remove tag from the system'), // the name of the operation which is displayed to the user.
+      'label' => t('Remove group name from the system'), // the name of the operation which is displayed to the user.
       'configurable' => FALSE,
       'vbo_configurable' => TRUE,
       'pass rows' => FALSE, // this will ensure that the entire views row is passed as part of the context in your action callback.
     ),
-    'claro_add_consent' => array( // declare the function name to be used. Replace the name with your function name
+    'claro_opt_in' => array( // declare the function name to be used. Replace the name with your function name
       'type' => 'entity', // can be node,comment etc
-      'label' => t('Add consent'), // the name of the operation which is displayed to the user.
+      'label' => t('Opt In'), // the name of the operation which is displayed to the user.
       'configurable' => FALSE,
       'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
     ),
-    'claro_remove_consent' => array( // declare the function name to be used. Replace the name with your function name
+    'claro_opt_out' => array( // declare the function name to be used. Replace the name with your function name
       'type' => 'entity', // can be node,comment etc
-      'label' => t('Remove consent'), // the name of the operation which is displayed to the user.
+      'label' => t('Opt out'), // the name of the operation which is displayed to the user.
       'configurable' => FALSE,
       'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
     ),
@@ -332,13 +334,13 @@ function claro_add_tags($entity, $context = array()) {
   }
 }
 
-function claro_add_consent($entity, $context = array()) {
-  $entity->field_consented['und'][0]['value'] = 'yes';
+function claro_opt_in($entity, $context = array()) {
+  $entity->field_opt_in['und'][0]['value'] = 1;
   node_save($entity);
 }
 
-function claro_remove_consent($entity, $context = array()) {
-  $entity->field_consented['und'][0]['value'] = 'no';
+function claro_claro_opt_out($entity, $context = array()) {
+  $entity->field_opt_in['und'][0]['value'] = 0;
   node_save($entity);
 }
 
@@ -351,10 +353,10 @@ function claro_migrate_numbers() {
     foreach($entities['node'] as $ent_node) {
       $node = node_load($ent_node->nid);
       if($node->status) {
-        $node->field_consented['und'][0]['value'] = 'yes';
+        $node->field_opt_in['und'][0]['value'] = 1;
       }
       else {
-        $node->field_consented['und'][0]['value'] = 'no';
+        $node->field_opt_in['und'][0]['value'] = 0;
       }
       node_save($node);
     }
