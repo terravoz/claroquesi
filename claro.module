@@ -1,6 +1,9 @@
 <?php
 //@todo: hide opt in field for anon users
 //@todo: vbo for remove system tags
+//@todo: opt in for voice and sms automatically
+//@todo: import contacts via csv with group, have multiple groups. make it compatible with export csv.
+//@todo: infinite scroll
 /**
  * @file Provides VoIP Drupal functionality for the Claro project
  */
@@ -218,7 +221,13 @@ function claro_action_info() {
     ),
     'claro_opt_out' => array( // declare the function name to be used. Replace the name with your function name
       'type' => 'entity', // can be node,comment etc
-      'label' => t('Opt out'), // the name of the operation which is displayed to the user.
+      'label' => t('Opt Out'), // the name of the operation which is displayed to the user.
+      'configurable' => FALSE,
+      'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
+    ),
+    'claro_send_opt_invitations' => array( // declare the function name to be used. Replace the name with your function name
+      'type' => 'entity', // can be node,comment etc
+      'label' => t('Send Opt-in invitations'), // the name of the operation which is displayed to the user.
       'configurable' => FALSE,
       'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
     ),
@@ -245,7 +254,7 @@ function claro_return_tags_form($options, $op = 'add') {
       '#type' => 'textfield',
       '#default_value' => '',
       '#title' => 'or create new groups',
-      '#autocomplete_path' => 'taxonomy/autocomplete/field_groups',
+      //'#autocomplete_path' => 'taxonomy/autocomplete/field_groups',
       //'#element_validate' => array('taxonomy_autocomplete_validate'),
     );
   }
@@ -306,6 +315,9 @@ function claro_remove_tags_sitewide($entity, $context = array()) {
 function claro_add_tags_form($options) {
   return claro_return_tags_form($options);
 }
+function claro_add_tags_validate($form, $form_state) {
+   _claro_taxonomy_autocomplete_validate($form_state['values']['new_tags'], 2);
+}
 
 function claro_add_tags_submit($form, $form_state) {
   $return =  claro_return_tags_submit($form, $form_state);
@@ -343,6 +355,33 @@ function claro_claro_opt_out($entity, $context = array()) {
   $entity->field_opt_in['und'][0]['value'] = 0;
   node_save($entity);
 }
+function claro_send_opt_invitations_form($form, $form_state) {
+  $form = array();
+  $form['message'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Message '),
+    '#default_value' => '[Company] would like to send you SMS reminders @ this number. X/week. HELP for help. STOP to end. Msg&data rates may apply. Reply KEYWORD to confirm today.',
+  );
+
+  return $form;
+}
+
+function claro_send_opt_invitations_submit($form, $form_state) {
+  $return['message'] = $form_state['values']['message'];
+  return $return;
+}
+
+function claro_send_opt_invitations($entity, $context = array()) {
+  if(isset($entity->field_phone_number['und'][0]['vnid'])) {
+    $vn = VoipNumber::load($entity->field_phone_number['und'][0]['real_vnid']);
+    $options = array(
+      'queue_name' => 'voipblast_texts',
+      'tags' => time(),
+    );
+    voipqueue_add_text($vn->getNumber(), $context['message'], $options);
+  }
+}
+
 
 function claro_migrate_numbers() {
   $query = new EntityFieldQuery();
@@ -374,7 +413,8 @@ function _claro_taxonomy_autocomplete_validate($tags, $vid) {
     // See if the term exists in the chosen vocabulary and return the tid;
     // otherwise, create a new 'autocreate' term for insert/update.
     if ($possibilities = taxonomy_term_load_multiple(array(), array('name' => trim($typed_term), 'vid' => $vid))) {
-      $term = array_pop($possibilities);
+      //$term = array_pop($possibilities);
+      form_set_error('new_tags', 'This tag already exists!');
     }
     else {
       //Create new term
