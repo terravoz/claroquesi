@@ -1,9 +1,9 @@
 <?php
 //@todo: hide opt in field for anon users
-//@todo: vbo for remove system tags
-//@todo: opt in for voice and sms automatically
+//@todo: fix vbo for remove system tags
+//@todo: opt in for voice and sms automatically FIXED
 //@todo: import contacts via csv with group, have multiple groups. make it compatible with export csv.
-//@todo: infinite scroll
+//@todo: infinite scroll FIXED
 /**
  * @file Provides VoIP Drupal functionality for the Claro project
  */
@@ -73,7 +73,8 @@ function claro_node_presave($node) {
     if(!$node->title) {
       $node->title = $node->field_phone_number['und'][0]['vnid'];
     }
-    if($node->field_opt_in['und'][0]['value'] == 'no') {
+
+    if(!$user->uid && !$node->field_opt_in['und'][0]['value']) {
       watchdog('claro', 'sending verification');
       //Send verification only for guest users
       $number = $node->field_phone_number['und'][0]['vnid'];

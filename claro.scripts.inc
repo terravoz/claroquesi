@@ -757,7 +757,7 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
     //@todo: if number is not published then resend sms
     //watchdog('debug', print_r($phone_number,true));
     if ($phone_number) {
-      $phone_number->status = 1; //verify
+      $phone_number->field_opt_in['und'][0]['value'] = 1; //verify
       node_save($phone_number);
       $ret = variable_get('claro_sms_welcome', 'Welcome to NannyVan App');
     }
@@ -789,6 +789,7 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
           $node->title = $caller_number;
           $node->language = 'und';
           $node->status = 1;
+          $node->field_opt_in['und'][0]['value'] = 1; //verify
           $node->field_phone_number['und'][0]['vnid'] = $caller_number;
           $language = claro_number_to_lang($dest_number);
           $node->field_language['und'][0]['value'] = $language;
