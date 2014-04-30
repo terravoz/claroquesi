@@ -229,6 +229,7 @@ function claro_action_info() {
       'type' => 'entity', // can be node,comment etc
       'label' => t('Send Opt-in invitations'), // the name of the operation which is displayed to the user.
       'configurable' => FALSE,
+      'vbo_configurable' => TRUE,
       'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
     ),
     );
