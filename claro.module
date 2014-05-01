@@ -378,12 +378,11 @@ function claro_send_opt_invitations($entity, $context = array()) {
     $vn = VoipNumber::load($entity->field_phone_number['und'][0]['real_vnid']);
     $options = array(
       'queue_name' => 'voipblast_texts',
-      'tags' => time(),
+      'tags' => 'optin',
     );
     voipqueue_add_text($vn->getNumber(), $context['message'], $options);
   }
 }
-
 
 function claro_migrate_numbers() {
   $query = new EntityFieldQuery();
