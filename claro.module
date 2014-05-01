@@ -1,5 +1,5 @@
 <?php
-//@todo: hide opt in field for anon users
+//@todo: hide opt in field for anon users FIXED
 //@todo: fix vbo for remove system tags
 //@todo: opt in for voice and sms automatically FIXED
 //@todo: import contacts via csv with group, have multiple groups. make it compatible with export csv.
@@ -113,7 +113,7 @@ function claro_form_alter(&$form, &$form_state, $form_id) {
   }
   else if($form_id == 'broadcast_node_form') {
    //_d($form);
-    drupal_set_title(t('Create a Message'));
+    drupal_set_title(t('New message blast'));
     drupal_add_js(drupal_get_path('module', 'claro').'/claro.js');
     $form['actions']['submit']['#value'] = t('Start');
     //$form['actions']['preview']['#value'] = t('Test');
@@ -216,19 +216,19 @@ function claro_action_info() {
     ),
     'claro_opt_in' => array( // declare the function name to be used. Replace the name with your function name
       'type' => 'entity', // can be node,comment etc
-      'label' => t('Opt In'), // the name of the operation which is displayed to the user.
+      'label' => t('Opt In selected contacts'), // the name of the operation which is displayed to the user.
       'configurable' => FALSE,
       'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
     ),
     'claro_opt_out' => array( // declare the function name to be used. Replace the name with your function name
       'type' => 'entity', // can be node,comment etc
-      'label' => t('Opt Out'), // the name of the operation which is displayed to the user.
+      'label' => t('Opt Out selected contacts'), // the name of the operation which is displayed to the user.
       'configurable' => FALSE,
       'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
     ),
     'claro_send_opt_invitations' => array( // declare the function name to be used. Replace the name with your function name
       'type' => 'entity', // can be node,comment etc
-      'label' => t('Send Opt-in invitations'), // the name of the operation which is displayed to the user.
+      'label' => t('Send Opt In invitation to selected contacts'), // the name of the operation which is displayed to the user.
       'configurable' => FALSE,
       'vbo_configurable' => TRUE,
       'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
