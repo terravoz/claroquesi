@@ -339,6 +339,7 @@ function claro_add_tags_submit($form, $form_state) {
   foreach($new_tags as $new_tag) {
       $return['tags'][$new_tag['tid']] = $new_tag['tid'];
   }
+  watchdog('debug', print_r($new_tags, true));
   watchdog('debug', print_r($return, true));
   return $return;
 }
