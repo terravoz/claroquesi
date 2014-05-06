@@ -4,6 +4,7 @@
 //@todo: opt in for voice and sms automatically FIXED
 //@todo: import contacts via csv with group, have multiple groups. make it compatible with export csv.
 //@todo: infinite scroll FIXED
+//@todo: error when adding new tag
 /**
  * @file Provides VoIP Drupal functionality for the Claro project
  */
@@ -138,9 +139,9 @@ function claro_form_alter(&$form, &$form_state, $form_id) {
   else if ($form_id == 'episode_node_form'){
     drupal_add_js(drupal_get_path('module', 'claro').'/claro.js');
   }
-  else if ($form_id == 'views_form_contacts_page'){
+  /*else if ($form_id == 'views_form_contacts_page'){
     dpm($form);
-  }
+  }*/
   return $form;
 }
 
@@ -434,8 +435,10 @@ function _claro_taxonomy_autocomplete_validate($tags, $vid) {
         'name' => $typed_term,
         'vocabulary_machine_name' => $vocabulary->machine_name,
       );
+      watchdog('debug', print_r($item, true));
         $term = (object) $item;
         taxonomy_term_save($term);
+      watchdog('debug', print_r($term, true));
         $item['tid'] = $term->tid;
     }
     $value[] = (array) $term;
