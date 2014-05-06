@@ -334,7 +334,7 @@ function claro_add_tags_validate($form, $form_state) {
   foreach ($typed_terms as $typed_term) {
     // See if the term exists in the chosen vocabulary and return the tid;
     // otherwise, create a new 'autocreate' term for insert/update.
-    if ($possibilities = taxonomy_term_load_multiple(array(), array('name' => trim($typed_term), 'vid' => $vid))) {
+    if ($possibilities = taxonomy_term_load_multiple(array(), array('name' => trim($typed_term), 'vid' => 2))) {
       //$term = array_pop($possibilities);
       form_set_error('new_tags', 'This tag already exists!');
     }
