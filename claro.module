@@ -442,6 +442,8 @@ function _claro_taxonomy_autocomplete_validate($tags, $vid) {
       watchdog('debug', print_r($term, true));
         $item['tid'] = $term->tid;
       $value[] = (array) $term;
+      watchdog('debug1', print_r($value, true));
+
     }
   }
 
