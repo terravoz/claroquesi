@@ -76,7 +76,7 @@ function claro_voipscript_load_script($script_name, $options = NULL) {
 
       $script->addLabel('spanish_version');
       $options['voice'] = 'claro-spanish';
-      voipvoice_set_current_voice('claro');
+      //voipvoice_set_current_voice('claro');
       $script->addGosub('claro_intro_script', $options);
       $script->addGoto('hang_up');
 
