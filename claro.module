@@ -434,7 +434,7 @@ function _claro_taxonomy_create_tags($tags, $vid) {
   foreach ($typed_terms as $typed_term) {
     // See if the term exists in the chosen vocabulary and return the tid;
     // otherwise, create a new 'autocreate' term for insert/update.
-    $possibilities = taxonomy_term_load_multiple(array(), array('name' => trim($typed_term), 'vid' => $vid))
+    $possibilities = taxonomy_term_load_multiple(array(), array('name' => trim($typed_term), 'vid' => $vid));
     if (!$possibilities) {
       //Create new term
       $item = array(
