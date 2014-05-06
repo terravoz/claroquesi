@@ -37,7 +37,7 @@
       $('#episode-node-form .vertical-tabs').hide();
 
       //Select all phone numbers
-      $('#broadcast-node-form #edit-field-phone-numbers-und option').attr('selected', 'selected');
+      //$('#broadcast-node-form #edit-field-phone-numbers-und option').attr('selected', 'selected');
       //Hide phone numbers field
       $('#broadcast-node-form #edit-field-phone-numbers').hide();
 
