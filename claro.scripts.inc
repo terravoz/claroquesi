@@ -86,6 +86,7 @@ function claro_voipscript_load_script($script_name, $options = NULL) {
 
 
       $script->addLabel('english_version');
+      $options['voice'] = 'claro';
       //$options['voice'] = 'woman';
       $script->addGosub('claro_intro_script', $options);
       $script->addGoto('hang_up');
