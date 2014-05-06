@@ -329,13 +329,22 @@ function claro_add_tags_form($options) {
   return claro_return_tags_form($options);
 }
 function claro_add_tags_validate($form, $form_state) {
-   _claro_taxonomy_autocomplete_validate($form_state['values']['new_tags'], 2);
+  // Translate term names into actual terms.
+  $typed_terms = drupal_explode_tags($form_state['values']['new_tags']);
+  foreach ($typed_terms as $typed_term) {
+    // See if the term exists in the chosen vocabulary and return the tid;
+    // otherwise, create a new 'autocreate' term for insert/update.
+    if ($possibilities = taxonomy_term_load_multiple(array(), array('name' => trim($typed_term), 'vid' => $vid))) {
+      //$term = array_pop($possibilities);
+      form_set_error('new_tags', 'This tag already exists!');
+    }
+  }
 }
 
 function claro_add_tags_submit($form, $form_state) {
   $return =  claro_return_tags_submit($form, $form_state);
   //dpm($form_state['values']);
-  $new_tags = _claro_taxonomy_autocomplete_validate($form_state['values']['new_tags'], 2);
+  $new_tags = _claro_taxonomy_create_tags($form_state['values']['new_tags'], 2);
   foreach($new_tags as $new_tag) {
       $return['tags'][$new_tag['tid']] = $new_tag['tid'];
   }
@@ -415,7 +424,7 @@ function claro_migrate_numbers() {
   }
 }
 
-function _claro_taxonomy_autocomplete_validate($tags, $vid) {
+function _claro_taxonomy_create_tags($tags, $vid) {
   $vocabulary = taxonomy_vocabulary_load($vid);
   // Autocomplete widgets do not send their tids in the form, so we must detect
   // them here and process them independently.
@@ -425,11 +434,8 @@ function _claro_taxonomy_autocomplete_validate($tags, $vid) {
   foreach ($typed_terms as $typed_term) {
     // See if the term exists in the chosen vocabulary and return the tid;
     // otherwise, create a new 'autocreate' term for insert/update.
-    if ($possibilities = taxonomy_term_load_multiple(array(), array('name' => trim($typed_term), 'vid' => $vid))) {
-      //$term = array_pop($possibilities);
-      form_set_error('new_tags', 'This tag already exists!');
-    }
-    else {
+    $possibilities = taxonomy_term_load_multiple(array(), array('name' => trim($typed_term), 'vid' => $vid))
+    if (!$possibilities) {
       //Create new term
       $item = array(
         'vid' => $vid,
@@ -437,15 +443,14 @@ function _claro_taxonomy_autocomplete_validate($tags, $vid) {
         'vocabulary_machine_name' => $vocabulary->machine_name,
       );
       watchdog('debug', print_r($item, true));
-        $term = (object) $item;
-        taxonomy_term_save($term);
+      $term = (object) $item;
+      taxonomy_term_save($term);
       watchdog('debug', print_r($term, true));
-        $item['tid'] = $term->tid;
+      $item['tid'] = $term->tid;
       $value[] = (array) $term;
       watchdog('debug1', print_r($value, true));
-
     }
   }
 
-return $value;
+  return $value;
 }
