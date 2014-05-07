@@ -4,7 +4,6 @@
 //@todo: opt in for voice and sms automatically FIXED
 //@todo: import contacts via csv with group, have multiple groups. make it compatible with export csv.
 //@todo: infinite scroll FIXED
-//@todo: error when adding new tag
 /**
  * @file Provides VoIP Drupal functionality for the Claro project
  */
@@ -71,6 +70,13 @@ function claro_admin_settings_form() {
     '#title' => t('SMS welcome'),
     '#description' => t('Welcome SMS for text to be sent the first time a user subscribes to the service.'),
     '#default_value' => variable_get('claro_sms_welcome', 'Welcome to NannyVan App'),
+  );
+
+  $form['claro_opt_message'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Message '),
+    '#default_value' => variable_get('claro_opt_message',
+      '[Company] would like to send you SMS reminders @ this number. X/week. HELP for help. STOP to end. Msg&data rates may apply. Reply KEYWORD to confirm today.')
   );
 
   return system_settings_form($form);
@@ -242,7 +248,7 @@ function claro_action_info() {
       'label' => t('Send Opt In invitation to selected contacts'), // the name of the operation which is displayed to the user.
       'configurable' => FALSE,
       'vbo_configurable' => TRUE,
-      'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
+      'pass rows' => FALSE, // this will ensure that the entire views row is passed as part of the context in your action callback.
     ),
     );
 }
@@ -383,7 +389,8 @@ function claro_send_opt_invitations_form($form, $form_state) {
   $form['message'] = array(
     '#type' => 'textarea',
     '#title' => t('Message '),
-    '#default_value' => '[Company] would like to send you SMS reminders @ this number. X/week. HELP for help. STOP to end. Msg&data rates may apply. Reply KEYWORD to confirm today.',
+    '#default_value' => variable_get('claro_opt_message',
+      '[Company] would like to send you SMS reminders @ this number. X/week. HELP for help. STOP to end. Msg&data rates may apply. Reply KEYWORD to confirm today.')
   );
 
   return $form;
@@ -395,14 +402,21 @@ function claro_send_opt_invitations_submit($form, $form_state) {
 }
 
 function claro_send_opt_invitations($entity, $context = array()) {
+  watchdog('debugoptin', print_r($entity,true));
   if(isset($entity->field_phone_number['und'][0]['vnid'])) {
     $vn = VoipNumber::load($entity->field_phone_number['und'][0]['real_vnid']);
     $options = array(
       'queue_name' => 'voipblast_texts',
       'tags' => 'optin',
     );
-    voipqueue_add_text($vn->getNumber(), $context['message'], $options);
+    //voipqueue_add_text($vn->getNumber(), $context['message'], $options);
   }
+
+  /*$phone_numbers = voipnumber_blast_get_numbers_from_groups($form_state['values']['field_select_destination']['und']);
+
+  drupal_set_message('Announcement queued for '.count($phone_numbers).' phone numbers.');
+
+  voipnumber_blast_create_queue($blast_id, $phone_numbers, $message);*/
 }
 
 function claro_migrate_numbers() {
