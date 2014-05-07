@@ -74,7 +74,7 @@ function claro_admin_settings_form() {
 
   $form['claro_opt_message'] = array(
     '#type' => 'textarea',
-    '#title' => t('Message '),
+    '#title' => t('Opt-in message'),
     '#default_value' => variable_get('claro_opt_message',
       '[Company] would like to send you SMS reminders @ this number. X/week. HELP for help. STOP to end. Msg&data rates may apply. Reply KEYWORD to confirm today.')
   );
@@ -248,7 +248,7 @@ function claro_action_info() {
       'label' => t('Send Opt In invitation to selected contacts'), // the name of the operation which is displayed to the user.
       'configurable' => FALSE,
       'vbo_configurable' => TRUE,
-      'pass rows' => FALSE, // this will ensure that the entire views row is passed as part of the context in your action callback.
+      'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
     ),
     );
 }
@@ -402,7 +402,7 @@ function claro_send_opt_invitations_submit($form, $form_state) {
 }
 
 function claro_send_opt_invitations($entity, $context = array()) {
-  watchdog('debugoptin', print_r($entity,true));
+  watchdog('debugoptin', print_r($context,true));
   if(isset($entity->field_phone_number['und'][0]['vnid'])) {
     $vn = VoipNumber::load($entity->field_phone_number['und'][0]['real_vnid']);
     $options = array(
