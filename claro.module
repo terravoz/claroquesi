@@ -146,10 +146,10 @@ function claro_form_alter(&$form, &$form_state, $form_id) {
     drupal_add_js(drupal_get_path('module', 'claro').'/claro.js');
   }
   else if ($form_id == 'views_form_contacts_page'){
-    dpm($form);
+
     $form['#prefix'] = '<fieldset class="collapsible form-wrapper collapse-processed" id="edit-voipcall-advances-text-messaging"><legend><span class="fieldset-legend"><a class="fieldset-title" href="#"><span class="fieldset-legend-prefix element-invisible">Hide</span>Search</a><span class="summary"></span></span></legend>'.$form['#prefix'];
     $form['#suffix'] = '</fieldset>'.$form['#suffix'];
-
+    dpm($form);
   }
   return $form;
 }
