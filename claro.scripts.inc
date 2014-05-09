@@ -717,44 +717,29 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
   $prefix_msg = 'NannyVan App. ';
   $msg = trim($msg);
 
-  if (!claro_get_phone_number($caller_number)) {
-    //Number already exists
+  $phone_number = claro_get_phone_number($caller_number);
+
+  if (!$phone_number) {
+    //Number doesn't exists
     $cmd = 'J';
   }
   else {
     if ($msg) {
       $request = explode(" ", $msg);
       $cmd = strtoupper($request[0]);
-    }
-  }
 
-  /*if ($msg == '') {
-    //$ret = t("Empty request.") . ' ' . $help_msg;
-    //log the error
-    //claro_log("Empty message received. Call ID: ".$call_id);
-    if (claro_get_phone_number($caller_number)) {
-      //Number already exists
-      $ret = t('Number already registered.');
-    }
-    else {
-      $cmd = 'J';
+      if(!$phone_number->field_opt_in['und'][0]['value']) {
+        watchdog('debug', "received $cmd for unopted contact. Returning optin message");
+        $ret = variable_get('claro_opt_message',
+          '[Company] would like to send you SMS reminders @ this number. X/week. HELP for help. STOP to end. Msg&data rates may apply. Reply KEYWORD to confirm today.');
+        return $ret;
+      }
     }
   }
-  else {
-    $request = explode(" ", $msg);
-    $cmd = strtoupper($request[0]);
-  }*/
 
   if ($cmd == 'Y') {
-    //$nids = VoipNumber::getNidsByNumber($caller_number);
-    $phone_number = claro_get_phone_number($caller_number);
-    /*$voip_numbers = voipnumber_get_voip_numbers($caller_number, 'number');
-    if(is_array($voip_numbers) && isset($voip_numbers[0])) {
-      $vn = $voip_numbers[0];
-      $vn->setVerified();
-      $vn->save();
-      $ret = ''; //success, no need for reply?
-    }*/
+    //$phone_number = claro_get_phone_number($caller_number);
+
     //@todo: if number is not published then resend sms
     //watchdog('debug', print_r($phone_number,true));
     if ($phone_number) {
@@ -772,18 +757,17 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
       $nids = VoipNumber::getNidsByNumber($caller_number);
       if ($nid = reset($nids)) {
         node_delete($nid);
-        $ret = t('You\'ve unsubscribed from the Domestic Worker App and should not receive further messages. Should you choose to subscribe again, text any letter to the following number: (347) 967-5500
-');
+        $ret = variable_get('claro_sms_unsubscribe', 'You\'ve unsubscribed from the Domestic Worker App and should not receive further messages. Should you choose to subscribe again, text any letter to the following number: (347) 967-5500');
       }
       else {
-        $ret = t('Number not in the list.');
+        $ret = variable_get('claro_sms_not_in_list', 'Number not in the list.');
       }
     }
     else {
       if ($cmd == 'J') {
-        if (claro_get_phone_number($caller_number)) {
+        if ($phone_number) {
           //Number already exists
-          $ret = t('Number already registered.');
+          $ret = variable_get('claro_sms_unknown', 'Number already registered.');
         }
         else {
           $node->type = 'phone_number';
@@ -798,7 +782,7 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
           node_save($node);
           //@todo: verify number
           if ($node->nid) {
-            $ret = t('Welcome to the Domestic Worker App! To STOP receiving text messages, text "S". For HELP, text "H". Msg & data rates may apply.');
+            $ret = variable_get('claro_sms_welcome', 'Welcome to NannyVan App');
           }
           else {
             watchdog('claro', 'Error saving phone number: ' . print_r($node, TRUE), array(), WATCHDOG_ERROR);
@@ -811,7 +795,7 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
           $ret = $help_msg;
         }
         else {
-          $ret = t('Unknown command. ') . $help_msg;
+          $ret = variable_get('claro_sms_unknown', 'Unknown command.') . ' ' . $help_msg;
         }
       }
     }

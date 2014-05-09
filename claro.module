@@ -2,8 +2,22 @@
 //@todo: hide opt in field for anon users FIXED
 //@todo: fix vbo for remove system tags
 //@todo: opt in for voice and sms automatically FIXED
-//@todo: import contacts via csv with group, have multiple groups. make it compatible with export csv.
+//@todo: import contacts via csv with group, have multiple groups. make it compatible with export csv. FIXED
 //@todo: infinite scroll FIXED
+//@todo: check what happens if somebody stops the number NUMBER IS DELETED
+//@todo: duplicated tags FIXED
+//@todo: send message to kester about number of parallel calls in queue
+//@todo: redo the missing contacts at live site
+//@todo: i ll implement export to live site to migrate the numbers
+//@todo: add all the standard messages (welcome, exit, help, opt in) to the admin form.
+//@todo: Make sure new tabs are visible to users under the Content Manager role
+//@todo: check google doc Open issues
+//@todo: use title for phone number
+//@todo: step1 add contact
+
+//@todo: vbo opt out doesnt work!
+
+
 /**
  * @file Provides VoIP Drupal functionality for the Claro project
  */
@@ -72,6 +86,34 @@ function claro_admin_settings_form() {
     '#default_value' => variable_get('claro_sms_welcome', 'Welcome to NannyVan App'),
   );
 
+  $form['claro_sms_unsubscribe'] = array(
+    '#type' => 'textarea',
+    '#title' => t('SMS Unsubscribe'),
+    '#description' => t('Unsubscribe text for SMS to be sent when S command is received.'),
+    '#default_value' => variable_get('claro_sms_unsubscribe', 'You\'ve unsubscribed from the Domestic Worker App and should not receive further messages. Should you choose to subscribe again, text any letter to the following number: (347) 967-5500'),
+  );
+
+  $form['claro_sms_duplicate'] = array(
+    '#type' => 'textarea',
+    '#title' => t('SMS Duplicate number'),
+    '#description' => t('Text for SMS to be sent when number tries to register again. '),
+    '#default_value' => variable_get('claro_sms_unknown', 'Number already registered.'),
+  );
+
+  $form['claro_sms_not_in_list'] = array(
+    '#type' => 'textarea',
+    '#title' => t('SMS Not in list'),
+    '#description' => t('Text for SMS to be sent when number tries to unsubscribe but he is not registered. '),
+    '#default_value' => variable_get('claro_sms_not_in_list', 'Number not in the list.'),
+  );
+
+  $form['claro_sms_unknown'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Unknown command'),
+    '#description' => t('SMS for unknown command.'),
+    '#default_value' => variable_get('claro_sms_unknown', 'Unknown command.'),
+  );
+
   $form['claro_opt_message'] = array(
     '#type' => 'textarea',
     '#title' => t('Opt-in message'),
@@ -94,7 +136,9 @@ function claro_node_presave($node) {
       $number = $node->field_phone_number['und'][0]['vnid'];
       $call = new VoipCall();
       $call->setDestNumber($number);
-      $text = 'Reply Y to give permission to join the mobile list.';
+      //$text = 'Reply Y to give permission to join the mobile list.';
+      $text = variable_get('claro_opt_message',
+        '[Company] would like to send you SMS reminders @ this number. X/week. HELP for help. STOP to end. Msg&data rates may apply. Reply KEYWORD to confirm today.');
       //@todo: use queue?
       voip_text($text, $call);
       //drupal_get_messages('status');
