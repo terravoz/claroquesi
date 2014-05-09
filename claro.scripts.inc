@@ -728,7 +728,7 @@ function _claro_sms_process_request($msg, $caller_number, $dest_number, $call_id
       $request = explode(" ", $msg);
       $cmd = strtoupper($request[0]);
 
-      if(!$phone_number->field_opt_in['und'][0]['value']) {
+      if(!$cmd == 'Y' && !$phone_number->field_opt_in['und'][0]['value']) {
         watchdog('debug', "received $cmd for unopted contact. Returning optin message");
         $ret = variable_get('claro_opt_message',
           '[Company] would like to send you SMS reminders @ this number. X/week. HELP for help. STOP to end. Msg&data rates may apply. Reply KEYWORD to confirm today.');
