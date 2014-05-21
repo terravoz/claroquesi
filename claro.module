@@ -1,22 +1,4 @@
 <?php
-//@todo: hide opt in field for anon users FIXED
-//@todo: fix vbo for remove system tags
-//@todo: opt in for voice and sms automatically FIXED
-//@todo: import contacts via csv with group, have multiple groups. make it compatible with export csv. FIXED
-//@todo: infinite scroll FIXED
-//@todo: check what happens if somebody stops the number NUMBER IS DELETED
-//@todo: duplicated tags FIXED
-//@todo: send message to kester about number of parallel calls in queue
-//@todo: redo the missing contacts at live site
-//@todo: i ll implement export to live site to migrate the numbers
-//@todo: add all the standard messages (welcome, exit, help, opt in) to the admin form.
-//@todo: Make sure new tabs are visible to users under the Content Manager role
-//@todo: check google doc Open issues
-//@todo: use title for phone number
-//@todo: step1 add contact
-
-//@todo: vbo opt out doesnt work!
-
 
 /**
  * @file Provides VoIP Drupal functionality for the Claro project
